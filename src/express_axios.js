@@ -21,13 +21,15 @@ app.post("/axios", async (req, res) => {
     const response = await axios.post(
       "http://127.0.0.1:11434/api/generate",
       options,
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { "Content-Type": "application/json" } } //important
     );
-    console.log(response);
 
     res.status(200).json(response.data.response);
   } catch (error) {
-    res.status(400).json(error);
+    console.error(error.response?.data || error.message);
+    res
+      .status(400)
+      .json(error.response?.data || { error: "Something went wrong" });
   }
 });
 
