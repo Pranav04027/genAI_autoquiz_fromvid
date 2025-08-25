@@ -21,7 +21,7 @@ async function askOllama() {
 
         console.log(respons.data.response)
     } catch (error) {
-        console.error("Uski to ma chud gai")
+        console.error("Something went wrong")
     }
 }
 

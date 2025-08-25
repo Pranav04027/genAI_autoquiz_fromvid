@@ -1,18 +1,36 @@
-import express from "express"
-import cors from "cors"
-import axios from "axios"
+//include axios with express.
 
-const app = express()
-app.use(express.json())
-app.use(cors())
+import express from "express";
+import cors from "cors";
+import axios from "axios";
 
-app.post("/axios", async (req,res)=>{
-    const prompt = req.body
+const app = express();
+app.use(express.json());
+app.use(cors());
 
-    const response = await axios.post("http://localhost/")
-})
+app.post("/axios", async (req, res) => {
+  try {
+    const prompt = req.body.prompt;
 
+    let options = {
+      model: "qwen2.5:7b-instruct",
+      prompt: prompt,
+      stream: false,
+    };
 
-app.listen(8000, () =>{
-    console.log("Server is running")
-})
+    const response = await axios.post(
+      "http://127.0.0.1:11434/api/generate",
+      options,
+      { headers: { "Content-Type": "application/json" } }
+    );
+    console.log(response);
+
+    res.status(200).json(response.data.response);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
+app.listen(8000, () => {
+  console.log("Server is running");
+});
