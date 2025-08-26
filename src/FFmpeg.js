@@ -10,12 +10,7 @@ const audio_path = path.join("C:", "Users", "prana", "Desktop", "W", "Bytelearn 
 console.log("Video path:", vid_path);
 console.log("Audio path:", audio_path);
 
-const create_audio = spawn("ffmpeg", [
-  "-i", vid_path,
-  "-vn",
-  "-acodec", "mp3",
-  audio_path
-]);
+const create_audio = spawn("ffmpeg", ["-i", vid_path, "-vn", "-acodec", "mp3", audio_path ]);
 
 create_audio.stdout.on("data", (data) => {
   console.log(`stdout: ${data}`);
