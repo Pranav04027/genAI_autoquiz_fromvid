@@ -1,11 +1,10 @@
 import { spawn } from "child_process";
 import path from "path";
 
-const vid_filename = "Human History.mp4";
-const audio_filename = "audio for Human History.mp3";
+const filename = "Human History";
 
-const vid_path = path.join("C:", "Users", "prana", "Desktop", "W", "Bytelearn Content", "Videos", vid_filename);
-const audio_path = path.join("C:", "Users", "prana", "Desktop", "W", "Bytelearn Content", "Extracted_audios", audio_filename);
+const vid_path = path.join("C:", "Users", "prana", "Desktop", "W", "Bytelearn Content", "Videos", `${filename}.mp4`);
+const audio_path = path.join("C:", "Users", "prana", "Desktop", "W", "Bytelearn Content", "Extracted_audios", `audio for ${filename}.mp3`);
 
 console.log("Video path:", vid_path);
 console.log("Audio path:", audio_path);

@@ -42,3 +42,8 @@ The pipeline is simple:
 * **FFmpeg** (in your system PATH)
 * **Ollama** (running locally) + a compatible model (e.g., `qwen2.5:7b-instruct`)
 * **Whisper** (OpenAI Whisper or faster-whisper/whisper.cpp—choose your flavor)
+
+learn to use Ollama -> 2 ways -> SDK or axios -> use them -> use them with express
+
+learn to use ffmpeg in terminal -> learn to use spawn + ffmpeg -> express + ffmpeg + spawn
+learn to use whisper -> whisper + spawn -> whisper + spawn + express
