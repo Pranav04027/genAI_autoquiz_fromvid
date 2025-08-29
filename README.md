@@ -46,4 +46,4 @@ The pipeline is simple:
 learn to use Ollama -> 2 ways -> SDK or axios -> use them -> use them with express
 
 learn to use ffmpeg in terminal -> learn to use spawn + ffmpeg -> express + ffmpeg + spawn
-learn to use whisper -> whisper + spawn -> whisper + spawn + express
+learn to use whisper -> whisper + spawn -> whisper + spawn + expressQ
