@@ -4,7 +4,7 @@ import fs from "fs"
 
 export const runollama = async (file_name, quiz_count) => {
 
-  const text_path = path.join("C:", "Users", "prana","Desktop","W","Bytelearn Content","Text_files",`${file_name}.txt`)
+  const text_path = path.join(process.cwd() ,"temp","Text_files",`${file_name}.txt`)
 
   console.log(`Reading text file using fs: ${file_name}`)
 
@@ -52,6 +52,10 @@ Rules:
     model: "qwen2.5:7b-instruct",
     prompt: prompt,
     stream: false,
+    options:{
+      num_ctx: 32768,
+      temperature: 0.4
+    }
   };
 
   try {

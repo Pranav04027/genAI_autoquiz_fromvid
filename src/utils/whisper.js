@@ -1,11 +1,15 @@
 import { spawn } from "child_process";
 import path from "path";
+import { fileURLToPath } from "url";
 
 export const whisper = (file_name) => {
   return new Promise((resolve, reject) => {
-    const file_path = path.join( "C:", "Users","prana","Desktop","W","Bytelearn Content","Extracted_audios",`${file_name}.mp3`);
+    // Resolve to project root (two levels up from src/utils)
+    const __dirname = path.dirname(fileURLToPath(import.meta.url))
+    const rootDir = path.resolve(__dirname, "..", "..")
 
-    const output_path = path.join("C:", "Users", "prana","Desktop","W","Bytelearn Content","Text_files",);
+    const file_path = path.join(rootDir ,"temp","Extracted_audios",`${file_name}.mp3`);
+    const output_path = path.join(rootDir,"temp","Text_files");
 
     console.log(`started whisper on ${file_name}.mp3`)
     const create_text = spawn("whisper", [ file_path,"--model","base","--output_format","txt","--output_dir",output_path,]);
@@ -24,5 +28,7 @@ export const whisper = (file_name) => {
     create_text.once("error", (err) => {
       reject(err);
     });
+
+
   });
 };
