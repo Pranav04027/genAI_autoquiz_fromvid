@@ -20,8 +20,8 @@ The pipeline is simple:
 
 **Choose your path:**
 
-* Just want to test the LLM? Use `src/express_axios.js` or `src/express_sdk.js`.
-* Want the full pipeline? Run `src/FFmpeg.js`, plug in Whisper, then send the transcript to Ollama.
+* End-to-end API (upload a video and get quizzes): run `src/app.js` and call the upload routes below.
+* Just want to tinker with LLM prompting? See `src/utils/ollama_quiz.js` and `src/utils/gemini_quiz.js`.
 
 ---
 
@@ -30,7 +30,7 @@ The pipeline is simple:
 * 🎞️ Extract audio from videos using **FFmpeg**
 * 🗣️ Transcribe audio to text using **Whisper** *(implementation scaffold included)*
 * 🧠 Generate quiz questions using **Ollama** (e.g., `qwen2.5:7b-instruct`)
-* 🧩 Clean, modular **Express.js API**
+* 🧩 Clean, modular **Express.js API** with file upload
 * 🔁 Two flavors: **Axios** or **Ollama SDK**
 * 🧪 Example prompts + sample response schema
 
@@ -42,8 +42,61 @@ The pipeline is simple:
 * **FFmpeg** (in your system PATH)
 * **Ollama** (running locally) + a compatible model (e.g., `qwen2.5:7b-instruct`)
 * **Whisper** (OpenAI Whisper or faster-whisper/whisper.cpp—choose your flavor)
+* A shell-accessible `ffmpeg` and `whisper` binary (in PATH)
 
-learn to use Ollama -> 2 ways -> SDK or axios -> use them -> use them with express
+---
 
-learn to use ffmpeg in terminal -> learn to use spawn + ffmpeg -> express + ffmpeg + spawn
-learn to use whisper -> whisper + spawn -> whisper + spawn + expressQ
+## ⚡ Quick Start (Upload-based)
+
+1) Install deps and start the server
+
+```bash
+npm install
+npm run dev
+```
+
+2) Call the API with a video file and desired quiz count (multipart/form-data)
+
+Ollama route:
+
+```bash
+curl -X POST http://localhost:8001/generate_quiz_ollama \
+  -F "video=@/absolute/path/to/lesson.mp4" \
+  -F "quiz_count=5"
+```
+
+Gemini route:
+
+```bash
+curl -X POST http://localhost:8001/generate_quiz_gemini \
+  -F "video=@/absolute/path/to/lesson.mp4" \
+  -F "quiz_count=5"
+```
+
+Response shape (example):
+
+```json
+{
+  "questions": [
+    {
+      "questionText": "...",
+      "options": [
+        { "text": "...", "isCorrect": false },
+        { "text": "...", "isCorrect": true },
+        { "text": "...", "isCorrect": false },
+        { "text": "...", "isCorrect": false }
+      ]
+    }
+  ]
+}
+```
+
+3) Cleanup
+
+After processing, the server automatically deletes:
+
+- The uploaded source video (`uploads/`)
+- Extracted audio (`temp/Extracted_audios/*.mp3`)
+- Generated transcript (`temp/Text_files/*.txt`)
+
+If an error occurs, it attempts to remove the uploaded video as well.
