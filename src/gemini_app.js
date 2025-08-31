@@ -4,9 +4,11 @@ import dotenv from "dotenv"
 dotenv.config()
 
 import { ffmpeg } from "./utils/ffmpeg.js"
-import { ollama_summery } from "./utils/ollama_summery.js"
 import {generatequiz} from "./utils/gemini_quiz.js"
 import { whisper } from "./utils/whisper.js"
+import path from "path"
+import { fileURLToPath } from "url"
+import fs from "fs"
 
 const app = express()
 
@@ -47,6 +49,20 @@ app.post("/generate_quiz_gemini", async (req, res) => {
 
         //Use gemmini
         const created_quiz = await generatequiz(txt_filename, quiz_count)
+
+        try {
+                const __dirname = path.dirname(fileURLToPath(import.meta.url))
+                const rootDir = path.resolve(__dirname, "..")
+    
+                await fs.promises.unlink(path.join(rootDir, "temp", "Extracted_audios", `${audio_filename}.mp3`))
+                console.log("Deleted created audio file from temp")
+    
+                await fs.promises.unlink(path.join(rootDir, "temp", "Text_files", `${txt_filename}.txt`))
+            console.log("Deleted created text filename from temp")
+        
+        } catch (error) {
+            throw new Error("Error occured while deleting files from temp" + error)
+        }
     
         res.status(200).json(created_quiz)
     } catch (error) {

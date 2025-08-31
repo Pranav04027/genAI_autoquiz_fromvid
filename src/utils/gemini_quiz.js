@@ -69,6 +69,36 @@ export const generatequiz = async (file_name, quiz_count) => {
 
   console.log("Sending prompt to Gemini...");
 
+  const quizSchema = {
+    type: "object",
+    properties: {
+      questions: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            questionText: { type: "string" },
+            options: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  text: { type: "string" },
+                  isCorrect: { type: "boolean" }
+                },
+                required: ["text", "isCorrect"]
+              },
+              minItems: 4,
+              maxItems: 4
+            }
+          },
+          required: ["questionText", "options"]
+        }
+      }
+    },
+    required: ["questions"]
+  };
+
   try {
     const result = await model.generateContent({
 
@@ -81,6 +111,8 @@ export const generatequiz = async (file_name, quiz_count) => {
 
       generationConfig: {
         temperature: 0.4,
+         responseMimeType: "application/json",
+         responseSchema: quizSchema
       },
 
     });
@@ -89,6 +121,7 @@ export const generatequiz = async (file_name, quiz_count) => {
 
     let raw = response.text()
 
+    let parsed;
     try{
       parsed = JSON.parse(raw)
     }catch(e){
